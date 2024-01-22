@@ -201,9 +201,11 @@ private:
 
   void m_updateWindowState()
   {
+    int w, h;
+    SDL_GetWindowSize(m_window, &w, &h);
+    m_window_size = glm::vec2(w, h);
+
     int x, y;
-    SDL_GetWindowSize(m_window, &x, &y);
-    m_window_size = glm::vec2(x, y);
     m_mouse_state = SDL_GetMouseState(&x, &y);
     m_mouse_pos = glm::vec2(x, y);
   }

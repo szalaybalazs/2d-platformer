@@ -8,6 +8,7 @@ extern "C" void SetWindowRatio(void *window);
 #include "Texture.hpp"
 
 #include "render/RenderWindow.hpp"
+#include "render/Camera.hpp"
 
 #include "ui/Font.hpp"
 #include "ui/Ui.hpp"
@@ -21,6 +22,9 @@ int main()
 
   Texture *texture = new Texture(window, "../assets/kitten.jpg");
   texture->setOpacity(0.5f);
+
+  Camera *camera = new Camera(window);
+  // camera->setPosition(glm::vec2(20.0f, 11.5f));
 
   Font *font = new Font(window, "../assets/fonts/visitor.ttf", 24.f);
   font->setStyle(TTF_STYLE_BOLD);
@@ -52,6 +56,15 @@ int main()
   {
     window->pollEvents();
     window->clear();
+
+    std::cout << "============================================================" << std::endl;
+
+    glm::vec2 world_pos = camera->screenToWorldPosition(window->getMousePos());
+    glm::vec2 screen_pos = camera->worldToScreenPosition(world_pos);
+    std::cout << "Mouse position: " << window->getMousePos().x << ", " << window->getMousePos().y << std::endl;
+    std::cout << "Screen position: " << screen_pos.x << ", " << screen_pos.y << std::endl;
+    std::cout << "World position: " << world_pos.x << ", " << world_pos.y << std::endl;
+    // return 0;
 
     fps->setText("FPS: " + std::to_string(static_cast<int>(window->getFps())) + " | Lifetime: " + std::to_string(static_cast<int>(window->getLifeTime() / 1000.0f)));
     ui->draw(window->getDeltaTime());

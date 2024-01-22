@@ -5,7 +5,7 @@ SRCDIR = src
 OBJDIR = dist
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
-HEADERS = $(wildcard $(SRCDIR)/*.hpp)
+HEADERS = $(shell find $(SRCDIR) -name '*.hpp')
 
 .PHONY: build debug run dev clean
 
