@@ -21,6 +21,7 @@ public:
       std::cout << "Error creating window: " << SDL_GetError() << std::endl;
     }
 
+    SDL_SetWindowMinimumSize(m_window, 800, 600);
     m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (m_renderer == nullptr)
     {

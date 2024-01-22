@@ -31,6 +31,11 @@ public:
     }
   };
 
+  void setOutline(int p_outline)
+  {
+    TTF_SetFontOutline(m_font, p_outline);
+  };
+
   void setStyle(int p_style)
   {
     TTF_SetFontStyle(m_font, p_style);

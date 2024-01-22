@@ -1,4 +1,7 @@
 #include <iostream>
+#include <SDL2/SDL_syswm.h>
+
+extern "C" void SetWindowRatio(void *window);
 
 #include "utils/logging.h"
 
@@ -24,7 +27,8 @@ int main()
   Font *pixel = new Font(window, "../assets/fonts/pixel.ttf", 24.f);
   pixel->setStyle(TTF_STYLE_NORMAL);
   Font *pixelTitle = new Font(window, "../assets/fonts/pixel.ttf", 36.f);
-  pixelTitle->setStyle(TTF_STYLE_BOLD);
+  pixelTitle->setStyle(TTF_STYLE_NORMAL);
+  // pixelTitle->setOutline(1);
 
   Ui *ui = new Ui(window);
   UiPanel *debugPanel = new UiPanel(glm::vec2(12.f, 12.f), glm::vec2(240.0f, 100.0f), TOP_LEFT);
