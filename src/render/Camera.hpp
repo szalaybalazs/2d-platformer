@@ -54,12 +54,9 @@ public:
   glm::vec2 worldToScreenPosition(glm::vec2 p_world_position)
   {
     glm::vec2 screen_size = m_window->getWindowSize();
-    glm::vec2 camera_top_left = m_position - (m_size * glm::vec2(1.f, -1.f) / 2.f);
-    glm::vec2 screen_position_relative = (p_world_position - camera_top_left) / m_size;
+    glm::vec2 camera_top_left = m_position - (m_size / 2.f) * glm::vec2(1.f, -1.f);
 
-    glm::vec2 screen_position = screen_position_relative * screen_size * glm::vec2(1.f, -1.f);
-
-    return screen_position;
+    return ((p_world_position - camera_top_left) / m_size) * screen_size * glm::vec2(1.f, -1.f);
   }
 
 private:
