@@ -2,25 +2,45 @@
 
 #include "utils/logging.h"
 
+#include "Texture.hpp"
+
 #include "render/RenderWindow.hpp"
 
+#include "ui/Font.hpp"
 #include "ui/Ui.hpp"
 #include "ui/UiPanel.hpp"
+#include "ui/UiRect.hpp"
+#include "ui/UiText.hpp"
 
 int main()
 {
-  LOG("Hello World!");
-
   RenderWindow *window = new RenderWindow("Game v0.0.1", 800, 600);
 
+  Texture *texture = new Texture(window, "../assets/kitten.jpg");
+  texture->setOpacity(0.5f);
+
+  Font *font = new Font(window, "../assets/fonts/visitor.ttf", 24.f);
+  font->setStyle(TTF_STYLE_BOLD);
+  Font *pixel = new Font(window, "../assets/fonts/pixel.ttf", 24.f);
+  pixel->setStyle(TTF_STYLE_NORMAL);
+  Font *pixelTitle = new Font(window, "../assets/fonts/pixel.ttf", 36.f);
+  pixelTitle->setStyle(TTF_STYLE_BOLD);
+
   Ui *ui = new Ui(window);
-  UiPanel *panel = new UiPanel(glm::vec2(0.0f, 0.0f), glm::vec2(100.0f, 100.0f), MIDDLE_CENTER);
-  UiPanel *childPanel = new UiPanel(glm::vec2(0.0f), glm::vec2(-20.0f, 50.0f), MIDDLE_CENTER);
+  UiPanel *debugPanel = new UiPanel(glm::vec2(12.f, 12.f), glm::vec2(240.0f, 100.0f), TOP_LEFT);
+  UiText *fps = new UiText(pixel, glm::vec2(0.0f, 0.0f), glm::vec2(-48.0f, 100.0f), TOP_LEFT);
+  fps->setText("FPS: 60");
+  fps->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+  debugPanel->addChild(fps);
 
-  UiPanel *footer = new UiPanel(glm::vec2(0.0f, 24.0f), glm::vec2(-48.0f, 100.0f), BOTTOM_CENTER);
+  UiRect *footer = new UiRect(glm::vec2(0.0f, 24.0f), glm::vec2(-48.0f, 100.0f), BOTTOM_CENTER, texture);
+  UiText *title = new UiText(pixelTitle, glm::vec2(0.0f, 12.0f));
+  title->setAnchor(TOP_CENTER);
+  title->setText("Hello World!");
+  title->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-  panel->addChild(childPanel);
-  ui->addChild(panel);
+  ui->addChild(title);
+  ui->addChild(debugPanel);
   ui->addChild(footer);
 
   window->prepare();
@@ -29,9 +49,9 @@ int main()
     window->pollEvents();
     window->clear();
 
-    ui->draw();
+    fps->setText("FPS: " + std::to_string(static_cast<int>(window->getFps())) + " | Lifetime: " + std::to_string(static_cast<int>(window->getLifeTime() / 1000.0f)));
+    ui->draw(window->getDeltaTime());
 
-    std::cout << window->getDeltaTime() << "ms, w: " << window->getWindowSize().x << ", h: " << window->getWindowSize().y << ", x: " << window->getMousePos().x << ", y: " << window->getMousePos().y << std::endl;
     window->draw();
   }
 

@@ -29,17 +29,20 @@ public:
     m_children.push_back(p_child);
   };
 
-  void draw()
+  void draw(float delta_time = 0.0f)
   {
     t_window_size = m_window->getWindowSize();
     t_mouse_pos = m_window->getMousePos();
-
-    LOG("Ui::draw()");
 
     for (auto &child : m_children)
     {
       child->draw(m_window->getRenderer(), m_position, t_window_size);
     }
+  };
+
+  void setPosition(glm::vec2 p_position)
+  {
+    m_position = p_position;
   };
 
 private:

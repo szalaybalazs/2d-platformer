@@ -3,6 +3,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 class RenderWindow
 {
@@ -24,6 +25,11 @@ public:
     if (m_renderer == nullptr)
     {
       std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
+    }
+
+    if (TTF_Init() != 0)
+    {
+      std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
     }
 
     SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
@@ -71,6 +77,7 @@ public:
     if (m_last_frame_time > 0.0f)
     {
       m_delta_time = (float)(m_current_frame_time - m_last_frame_time);
+      m_life_time += m_delta_time;
     }
     m_last_frame_time = m_current_frame_time;
   };
@@ -122,12 +129,30 @@ public:
   }
 
   /**
-   * @brief Get the Delta Time object
-   * Returns the time in seconds between the last two frames
+   * @brief Get the Delta Time
+   * Returns the time in miliseconds between the last two frames
    */
   float getDeltaTime()
   {
     return m_delta_time;
+  }
+
+  /**
+   * @brief Get the FPS
+   * Returns the number of frames per second
+   */
+  float getFps()
+  {
+    return 1000.0f / m_delta_time;
+  }
+
+  /**
+   * @brief Get the Life Time
+   * Returns the time in miliseconds the window was active
+   */
+  float getLifeTime()
+  {
+    return m_life_time;
   }
 
   /**
@@ -148,6 +173,10 @@ public:
     return m_mouse_pos;
   }
 
+  /**
+   * @brief Get the SDL renderer
+   * Returns the SDL renderer
+   */
   SDL_Renderer *getRenderer()
   {
     return m_renderer;
@@ -162,6 +191,7 @@ private:
 
   float m_current_frame_time = 0;
   float m_last_frame_time = 0;
+  float m_life_time = 0;
   float m_delta_time = 0;
   Uint32 m_mouse_state = 0;
 
