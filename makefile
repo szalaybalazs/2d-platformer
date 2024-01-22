@@ -2,7 +2,7 @@ CC = clang
 CFLAGS = -v -I/opt/homebrew/include -I./include -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lc++ -std=c++20
 TARGET = main
 SOURCE = $(wildcard src/*.cpp)
-OBJECTS = $(patsubst src/%.cpp, dist/%.o, $(SOURCE))
+OBJECTS = $(patsubst src/*%.cpp, dist/%.o, $(SOURCE))
 
 .PHONY: build debug run dev clean
 
