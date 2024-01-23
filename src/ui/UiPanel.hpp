@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
+#include "../render/RenderWindow.hpp"
+
 #define DRAW_BOUNDS 0
 
 enum UiPanelAnchor
@@ -46,9 +48,7 @@ public:
     m_anchor = p_anchor;
   };
 
-  virtual void drawSelf(SDL_Renderer *renderer){};
-
-  virtual void draw(SDL_Renderer *renderer, glm::vec2 p_ref_position, glm::vec2 p_ref_size)
+  virtual void update(RenderWindow *p_window, glm::vec2 p_ref_position, glm::vec2 p_ref_size)
   {
     m_screen_size.x = m_size.x == INFINITY ? p_ref_size.x : m_size.x < 0 ? p_ref_size.x + m_size.x
                                                                          : m_size.x;
@@ -73,17 +73,28 @@ public:
       m_screen_position.x = p_ref_position.x + p_ref_size.x - m_position.x - m_screen_size.x;
     }
 
-    drawSelf(renderer);
+    for (auto &child : m_children)
+    {
+      child->update(p_window, m_screen_position, m_screen_size);
+    }
+  }
 
+  virtual void drawSelf(RenderWindow *p_window)
+  {
 #if DRAW_BOUNDS
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_FRect rect = {m_screen_position.x, m_screen_position.y, m_screen_size.x, m_screen_size.y};
     SDL_RenderDrawRectF(renderer, &rect);
 #endif
+  };
+
+  virtual void draw(RenderWindow *p_window)
+  {
+    drawSelf(p_window);
 
     for (auto &child : m_children)
     {
-      child->draw(renderer, m_screen_position, m_screen_size);
+      child->draw(p_window);
     }
   };
 

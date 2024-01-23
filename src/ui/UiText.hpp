@@ -8,6 +8,7 @@
 
 #include "UiPanel.hpp"
 #include "Font.hpp"
+#include "../render/RenderWindow.hpp"
 
 class UiText : public UiPanel
 {
@@ -36,7 +37,7 @@ public:
     _updateTexture();
   };
 
-  virtual void drawSelf(SDL_Renderer *renderer)
+  virtual void drawSelf(RenderWindow *p_window)
   {
     SDL_FRect rect;
     rect.x = m_screen_position.x;
@@ -44,7 +45,7 @@ public:
     rect.w = m_screen_size.x;
     rect.h = m_screen_size.y;
 
-    SDL_RenderCopyF(renderer, m_texture, NULL, &rect);
+    SDL_RenderCopyF(p_window->getRenderer(), m_texture, NULL, &rect);
   };
 
 private:

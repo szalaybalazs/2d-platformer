@@ -39,6 +39,8 @@ public:
     // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 #endif
+
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
   };
 
   ~RenderWindow()
@@ -172,6 +174,11 @@ public:
   glm::vec2 getMousePos()
   {
     return m_mouse_pos;
+  }
+
+  Uint32 getMouseState()
+  {
+    return m_mouse_state;
   }
 
   /**

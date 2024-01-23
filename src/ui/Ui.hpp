@@ -36,7 +36,8 @@ public:
 
     for (auto &child : m_children)
     {
-      child->draw(m_window->getRenderer(), m_position, t_window_size);
+      child->update(m_window, m_position, t_window_size);
+      child->draw(m_window);
     }
   };
 
