@@ -190,6 +190,20 @@ public:
     return m_renderer;
   }
 
+  // ========================
+  // Graphics Helper Functions
+  // ========================
+
+  /**
+   * @brief Draw a line
+   * Draw a line from p_start to p_end with the color p_color
+   */
+  void drawLine(glm::vec2 p_start, glm::vec2 p_end, glm::vec3 p_color = glm::vec3(1.0f, 1.0f, 1.0f))
+  {
+    SDL_SetRenderDrawColor(m_renderer, p_color.r * 255.0f, p_color.g * 255.0f, p_color.b * 255.0f, 255);
+    SDL_RenderDrawLine(m_renderer, p_start.x, p_start.y, p_end.x, p_end.y);
+  }
+
 private:
   SDL_Window *m_window;
   SDL_Renderer *m_renderer;

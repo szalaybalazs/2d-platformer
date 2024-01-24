@@ -33,6 +33,11 @@ public:
     return m_size;
   }
 
+  RenderWindow *getWindow()
+  {
+    return m_window;
+  }
+
   void update(float deltaTime = 0.0f)
   {
     // for when the camera will follow the character, move on it's own
@@ -57,6 +62,20 @@ public:
     glm::vec2 camera_top_left = m_position - (m_size / 2.f) * glm::vec2(1.f, -1.f);
 
     return ((p_world_position - camera_top_left) / m_size) * screen_size * glm::vec2(1.f, -1.f);
+  }
+
+  glm::vec4 worldToScreenBounds(glm::vec4 p_world_bounds)
+  {
+    glm::vec2 world_bottom_left = glm::vec2(p_world_bounds.x, p_world_bounds.y);
+    glm::vec2 world_top_right = glm::vec2(p_world_bounds.x + p_world_bounds.z, p_world_bounds.y + p_world_bounds.w);
+
+    glm::vec2 screen_bottom_left = worldToScreenPosition(world_bottom_left);
+    glm::vec2 screen_top_right = worldToScreenPosition(world_top_right);
+
+    glm::vec2 screen_size = (screen_top_right - screen_bottom_left);
+
+    float h = std::abs(screen_size.y);
+    return glm::vec4(screen_bottom_left.x, screen_bottom_left.y - h, std::abs(screen_size.x), h);
   }
 
 private:
