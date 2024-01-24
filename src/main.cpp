@@ -89,7 +89,7 @@ int main()
   go->addChild(child);
   scene->addGameObject(go);
 
-  Solid *floor = new Solid(glm::vec2(0.0f, -8.75f), glm::vec2(36.0f, 1.0f));
+  Solid *floor = new Solid(glm::vec2(0.0f, -8.75f), glm::vec2(36.0f, 0.1f));
   scene->addGameObject(floor);
 
   BoxCollider *cube = new BoxCollider(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f));

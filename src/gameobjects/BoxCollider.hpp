@@ -52,8 +52,11 @@ public:
 
   bool intersectsAABB(BoxCollider *p_other)
   {
-    if (this->m_bounds.x<p_other->m_bounds.x + p_other->m_bounds.z &&this->m_bounds.x + this->m_bounds.z> p_other->m_bounds.x &&
-        this->m_bounds.y<p_other->m_bounds.y + p_other->m_bounds.w &&this->m_bounds.y + this->m_bounds.w> p_other->m_bounds.y)
+    glm::vec4 this_bounds = this->getBounds();
+    glm::vec4 other_bounds = p_other->getBounds();
+
+    if (this_bounds.x < other_bounds.x + other_bounds.z && this_bounds.x + this_bounds.z > other_bounds.x &&
+        this_bounds.y < other_bounds.y + other_bounds.w && this_bounds.y + this_bounds.w > other_bounds.y)
     {
       return true;
     }
@@ -61,5 +64,41 @@ public:
     {
       return false;
     }
+  }
+
+  // using the Liang-Barsky algorithm
+  bool intersectsLine(glm::vec2 p_start, glm::vec2 p_end)
+  {
+    float t0 = 0.0;
+    float t1 = 1.0;
+    glm::vec2 delta = p_end - p_start;
+
+    glm::vec4 bounds = getBounds();
+    std::array<float, 4> p = {-delta.x, delta.x, -delta.y, delta.y};
+    std::array<float, 4> q = {p_start.x - bounds.x, bounds.x + bounds.z - p_start.x, p_start.y - bounds.y, bounds.y + bounds.w - p_start.y};
+
+    for (int i = 0; i < 4; i++)
+    {
+      if (p[i] == 0.0f && q[i] < 0.0f)
+        return false;
+      if (p[i] < 0.0f)
+      {
+        float t = q[i] / p[i];
+        if (t > t1)
+          return false;
+        else if (t > t0)
+          t0 = t;
+      }
+      else if (p[i] > 0.0f)
+      {
+        float t = q[i] / p[i];
+        if (t < t0)
+          return false;
+        else if (t < t1)
+          t1 = t;
+      }
+    }
+
+    return true;
   }
 };

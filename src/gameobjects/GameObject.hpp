@@ -14,10 +14,7 @@ class Scene;
 class GameObject
 {
 public:
-  GameObject(glm::vec2 p_position, glm::vec2 p_size) : m_position(p_position), m_size(p_size)
-  {
-    _updateBounds();
-  };
+  GameObject(glm::vec2 p_position, glm::vec2 p_size) : m_position(p_position), m_size(p_size){};
   virtual ~GameObject(){};
 
   glm::vec2 getPosition()
@@ -30,21 +27,14 @@ public:
     return m_size;
   }
 
-  glm::vec4 getBounds()
-  {
-    return m_bounds;
-  }
-
   void setPosition(glm::vec2 p_position)
   {
     m_position = p_position;
-    _updateBounds();
   }
 
   void setSize(glm::vec2 p_size)
   {
     m_size = p_size;
-    _updateBounds();
   }
 
   void addChild(GameObject *p_child)
@@ -75,13 +65,16 @@ public:
     {
       m_children[i]->update(p_scene, deltaTime);
     }
-
-    _updateBounds();
   };
+
+  glm::vec4 getBounds()
+  {
+    return glm::vec4((m_position - m_size / 2.0f), m_size);
+  }
 
   virtual void draw(Camera *p_camera, glm::vec2 p_ref_position = glm::vec2(0.0f))
   {
-    glm::vec4 screen_bounds = p_camera->worldToScreenBounds(m_bounds - (glm::vec4(p_ref_position, glm::vec2(0.0f))));
+    glm::vec4 screen_bounds = p_camera->worldToScreenBounds(getBounds() - (glm::vec4(p_ref_position, glm::vec2(0.0f))));
 
     for (int i = 0; i < m_children.size(); i++)
     {
@@ -103,12 +96,6 @@ public:
 protected:
   glm::vec2 m_position;
   glm::vec2 m_size;
-  glm::vec4 m_bounds;
 
   std::vector<GameObject *> m_children;
-
-  void _updateBounds()
-  {
-    m_bounds = glm::vec4((m_position - m_size / 2.0f), m_size);
-  }
 };
